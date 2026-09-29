@@ -1,9 +1,9 @@
-# Penetration Test Report — "Support" Web Application
+# Penetration Test Report - "Support" Web Application
 
 | | |
 |---|---|
-| **Target** | Support portal — `support.thm` (`TARGET`) |
-| **Type** | Web application penetration test — grey box (network access, no account provided) |
+| **Target** | Support portal - `support.thm` (`TARGET`) |
+| **Type** | Web application penetration test - grey box (network access, no account provided) |
 | **Environment** | TryHackMe lab (authorized, intentionally vulnerable) |
 | **Date** | 2026-08-04 |
 | **Version** | v1.0 |
@@ -32,7 +32,7 @@ clear-text secrets and rotate them, (4) add rate limiting on login.
 
 | # | Vulnerability | Severity | CVSS |
 |---|---|---|---|
-| F1 | Broken access control — forgeable authorization cookie (`isITUser`) | **High** | 8.1 |
+| F1 | Broken access control - forgeable authorization cookie (`isITUser`) | **High** | 8.1 |
 | F2 | IDOR on `GET /user/{id}` → administrator account disclosure | **High** | 7.5 |
 | F3 | Local file read / source disclosure via `?skin=../config` | **High** | 7.5 |
 | F4 | Weak password + no rate limiting on login | **Medium** | 6.5 |
@@ -41,7 +41,7 @@ clear-text secrets and rotate them, (4) add rate limiting on login.
 
 ## 3. Detailed findings
 
-### F1 — Broken access control: forgeable authorization cookie
+### F1 - Broken access control: forgeable authorization cookie
 **Severity: High (CVSS 8.1)**
 
 **Description**
@@ -51,7 +51,7 @@ application makes its role decision client-side, trusting a cookie the user full
 
 **Impact**
 Replacing the cookie with `md5("true")` (`b326b5062b2f0e69046810717534cb09`) elevates the
-session to an internal "IT User" role, unlocking the **Admin Panel** and the internal API —
+session to an internal "IT User" role, unlocking the **Admin Panel** and the internal API -
 a horizontal-to-vertical privilege escalation performed entirely from the browser.
 
 **Exploitation steps**
@@ -67,7 +67,7 @@ be transmitted, use a signed, tamper-evident token (e.g. a server-side session r
 
 ---
 
-### F2 — IDOR on `GET /user/{id}` → administrator disclosure
+### F2 - IDOR on `GET /user/{id}` → administrator disclosure
 **Severity: High (CVSS 7.5)**
 
 **Description**
@@ -82,17 +82,17 @@ for full compromise.
 **Exploitation steps**
 1. Observe the request for the current user: `GET /user/3` → `{ "email": "...", "admin": false }`.
 2. Replay in Burp Repeater against other identifiers:
-   - `GET /user/1` → `specialadmin@support.thm` (`admin: true`) — **administrator**.
+   - `GET /user/1` → `specialadmin@support.thm` (`admin: true`) - **administrator**.
    - `GET /user/2` → `IT@support.thm` (`admin: false`).
 
 **Recommendation**
 Enforce object-level authorization on every request: verify the authenticated user is
 permitted to access the requested resource. Prefer non-sequential identifiers (UUIDs) as
-defense in depth, but authorization — not obscurity — is the fix.
+defense in depth, but authorization - not obscurity - is the fix.
 
 ---
 
-### F3 — Local file read / source disclosure via `?skin=../config`
+### F3 - Local file read / source disclosure via `?skin=../config`
 **Severity: High (CVSS 7.5)**
 
 **Description**
@@ -112,7 +112,7 @@ this yields working administrator credentials.
 3. The response embeds the raw source of `config.php`, revealing `$MASTER_PASSWORD`.
 
 > **Note on the technique:** because the loader *echoes* the file instead of `include()`-ing
-> it, a plain traversal is enough to disclose source — no `php://filter` wrapper is needed.
+> it, a plain traversal is enough to disclose source - no `php://filter` wrapper is needed.
 > A theme/skin selector that renders a `.php` file as text is, in itself, a source-disclosure
 > primitive.
 
@@ -123,7 +123,7 @@ directory, and keep configuration/secret files outside any user-reachable loader
 
 ---
 
-### F4 — Weak password and no rate limiting on login
+### F4 - Weak password and no rate limiting on login
 **Severity: Medium (CVSS 6.5)**
 
 **Description**
@@ -166,7 +166,7 @@ LFI ?skin=../config  (F3)  →  config.php source  →  master password  →  ad
 
 ---
 
-## 5. Appendix — Exposed surface (initial scan)
+## 5. Appendix - Exposed surface (initial scan)
 
 | Port | Service | Version |
 |---|---|---|
@@ -176,7 +176,7 @@ LFI ?skin=../config  (F3)  →  config.php source  →  master password  →  ad
 **Methodology:** reconnaissance (Nmap, directory brute force) → initial access (login brute
 force) → privilege escalation (cookie tampering) → account discovery (IDOR) → secret
 disclosure (LFI source read). A key lesson from this engagement: **let the evidence dictate
-the vulnerability class** — the API here was read-only, and the exploitable path was reading
+the vulnerability class** - the API here was read-only, and the exploitable path was reading
 data (IDOR + source disclosure), not modifying it.
 
 ---

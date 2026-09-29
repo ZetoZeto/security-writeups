@@ -1,9 +1,9 @@
-# Penetration Test Report — "Blue" (MS17-010 / EternalBlue)
+# Penetration Test Report - "Blue" (MS17-010 / EternalBlue)
 
 | | |
 |---|---|
-| **Target** | Windows 7 Professional SP1 (x64) — `TARGET` |
-| **Type** | Network penetration test — black box |
+| **Target** | Windows 7 Professional SP1 (x64) - `TARGET` |
+| **Type** | Network penetration test - black box |
 | **Environment** | TryHackMe lab (authorized, intentionally vulnerable) |
 | **Date** | 2026-06-10 |
 | **Version** | v1.0 |
@@ -17,7 +17,7 @@ A single unpatched, internet-era vulnerability in the SMBv1 service (**MS17-010*
 yielding the highest privilege level on Windows (`NT AUTHORITY\SYSTEM`). No credentials were
 required.
 
-**Business impact:** complete compromise of the machine — full read/write access to all
+**Business impact:** complete compromise of the machine - full read/write access to all
 data, credential harvesting, and a foothold for lateral movement across the network.
 
 **Remediation priority:** apply the MS17-010 patch, **disable SMBv1**, and segment legacy
@@ -30,7 +30,7 @@ outbreaks.
 
 | # | Vulnerability | Severity | CVSS |
 |---|---|---|---|
-| F1 | MS17-010 — SMBv1 remote code execution (EternalBlue) | **Critical** | 9.8 |
+| F1 | MS17-010 - SMBv1 remote code execution (EternalBlue) | **Critical** | 9.8 |
 | F2 | SMB message signing disabled | **Medium** | 5.3 |
 | F3 | Unsupported / legacy OS (Windows 7 SP1) exposed on the network | **Medium** | 5.9 |
 
@@ -38,8 +38,8 @@ outbreaks.
 
 ## 3. Detailed findings
 
-### F1 — MS17-010 SMBv1 remote code execution (EternalBlue)
-**Severity: Critical (CVSS 9.8 — AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H)**
+### F1 - MS17-010 SMBv1 remote code execution (EternalBlue)
+**Severity: Critical (CVSS 9.8 - AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H)**
 
 **Description**
 The host exposes SMBv1 (port 445) and is vulnerable to MS17-010, a memory-corruption flaw in
@@ -47,11 +47,11 @@ the way SMBv1 handles specially crafted requests. It permits arbitrary code exec
 remotely, without authentication.
 
 **Impact**
-Full remote code execution as `NT AUTHORITY\SYSTEM` — the highest local privilege. From
+Full remote code execution as `NT AUTHORITY\SYSTEM` - the highest local privilege. From
 there: dump credentials, create accounts, install persistence, and pivot to other hosts.
 
 **Exploitation steps**
-1. Recon — `nmap -sC -sV`: SMB open on 445, OS fingerprinted as Windows 7 SP1; host scripts
+1. Recon - `nmap -sC -sV`: SMB open on 445, OS fingerprinted as Windows 7 SP1; host scripts
    flag message signing as disabled.
 2. Confirm the vulnerability with the MS17-010 scanner:
    ```
@@ -64,7 +64,7 @@ there: dump credentials, create accounts, install persistence, and pivot to othe
    the session if the initial process dies).
 5. Verify privileges (`getuid` → `NT AUTHORITY\SYSTEM`) and collect objectives.
 
-> **Operator note:** EternalBlue corrupts kernel pool memory and can be unstable — if the
+> **Operator note:** EternalBlue corrupts kernel pool memory and can be unstable - if the
 > first attempt fails, re-running against a freshly rebooted target is expected behavior.
 
 **Recommendation**
@@ -76,13 +76,13 @@ there: dump credentials, create accounts, install persistence, and pivot to othe
 **Detection (blue-team notes)**
 - Network: unusual SMBv1 traffic and known EternalBlue signatures (IDS/IPS).
 - Endpoint: unexpected `SYSTEM`-level process creation and process migration
-  (Sysmon Event ID 8 — CreateRemoteThread; ID 10 — process access to `lsass`).
+  (Sysmon Event ID 8 - CreateRemoteThread; ID 10 - process access to `lsass`).
 - A modern EDR (e.g. Microsoft Defender for Endpoint) flags both the exploit behavior and the
   post-exploitation credential access.
 
 ---
 
-### F2 — SMB message signing disabled
+### F2 - SMB message signing disabled
 **Severity: Medium (CVSS 5.3)**
 
 **Description**
@@ -98,7 +98,7 @@ Require SMB signing via Group Policy, alongside disabling SMBv1.
 
 ---
 
-### F3 — Legacy, unsupported operating system exposed
+### F3 - Legacy, unsupported operating system exposed
 **Severity: Medium (CVSS 5.9)**
 
 **Description**
@@ -116,15 +116,15 @@ monitoring.
 
 ---
 
-## 4. Appendix — Exposed surface (initial scan)
+## 4. Appendix - Exposed surface (initial scan)
 
 | Port | Service | Notes |
 |---|---|---|
 | 135/tcp | msrpc | Microsoft Windows RPC |
 | 139/tcp | netbios-ssn | |
-| 445/tcp | microsoft-ds | Windows 7 Pro SP1 — **MS17-010 vulnerable** |
+| 445/tcp | microsoft-ds | Windows 7 Pro SP1 - **MS17-010 vulnerable** |
 | 3389/tcp | ms-wbt-server | RDP |
-| 49152–49160/tcp | msrpc | Dynamic RPC |
+| 49152-49160/tcp | msrpc | Dynamic RPC |
 
 **Methodology:** reconnaissance (Nmap service + OS detection, SMB host scripts) →
 vulnerability confirmation (MS17-010 scanner) → exploitation (EternalBlue → SYSTEM) →

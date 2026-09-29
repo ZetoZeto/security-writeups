@@ -1,10 +1,10 @@
 # 🛡️ Security Lab Write-ups
 
-Hands-on offensive-security lab work — penetration-test reports and methodology notes
+Hands-on offensive-security lab work - penetration-test reports and methodology notes
 produced while training on intentionally vulnerable machines (TryHackMe, Hack The Box) and
 preparing the **Microsoft SC-200** certification.
 
-> **Author:** Philippe Luu — 2nd-year Computer Engineering student (CESI)
+> **Author:** Philippe Luu - 2nd-year Computer Engineering student (CESI)
 > **Looking for:** an international offensive-security internship (red / purple team).
 > This repository documents my practical lab work; it complements my main portfolio.
 
@@ -14,7 +14,7 @@ preparing the **Microsoft SC-200** certification.
 
 **Purple-team oriented.** Professional **blue-team** experience with enterprise endpoint
 security (Microsoft Intune, Defender for Endpoint, Microsoft Sentinel), now building a
-solid **offensive** skill set — web application exploitation, network recon, privilege
+solid **offensive** skill set - web application exploitation, network recon, privilege
 escalation and reporting. I approach every attack thinking about the detection and
 remediation on the other side.
 
@@ -28,13 +28,13 @@ remediation on the other side.
 | [`methodology/`](methodology/) | Reusable checklists and playbooks I follow during an engagement |
 
 ### Featured reports
-- **[Recruit — Web application penetration test](reports/recruit-web-app-pentest.md)**
+- **[Recruit - Web application penetration test](reports/recruit-web-app-pentest.md)**
   Unauthenticated to full database compromise: information disclosure → LFI / source
   disclosure → SQL injection (UNION). 7 findings, ranked by CVSS.
-- **[Support — Broken access control chain](reports/support-idor-lfi-chain.md)**
+- **[Support - Broken access control chain](reports/support-idor-lfi-chain.md)**
   Weak login → forgeable authorization cookie → IDOR → LFI source disclosure of admin
   credentials.
-- **[Blue — MS17-010 / EternalBlue](reports/blue-eternalblue.md)**
+- **[Blue - MS17-010 / EternalBlue](reports/blue-eternalblue.md)**
   Legacy SMBv1 remote code execution leading to SYSTEM, with detection & hardening notes.
 
 ---
@@ -60,7 +60,7 @@ John the Ripper / Hashcat · Wireshark / tcpdump · Impacket · Splunk · KQL.
 
 ## 🎓 Certifications in progress
 
-- **Microsoft SC-200** — Security Operations Analyst (KQL, Defender XDR, Microsoft Sentinel).
+- **Microsoft SC-200** - Security Operations Analyst (KQL, Defender XDR, Microsoft Sentinel).
 
 ---
 
@@ -69,7 +69,7 @@ John the Ripper / Hashcat · Wireshark / tcpdump · Impacket · Splunk · KQL.
 Every engagement documented here was performed against **authorized, intentionally
 vulnerable training environments** (TryHackMe / Hack The Box). No real-world system was
 ever targeted. Lab-specific credentials, IP addresses and capture-the-flag values have
-been redacted or genericized — the focus is on **methodology, reasoning and remediation**,
+been redacted or genericized - the focus is on **methodology, reasoning and remediation**,
 not on spoiling the labs.
 
 ---
