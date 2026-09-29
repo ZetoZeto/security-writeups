@@ -1,8 +1,7 @@
 # 🛡️ Security Lab Write-ups
 
 Hands-on offensive-security lab work - penetration-test reports and methodology notes
-produced while training on intentionally vulnerable machines (TryHackMe, Hack The Box) and
-preparing the **Microsoft SC-200** certification.
+produced while training on intentionally vulnerable machines (TryHackMe, Hack The Box).
 
 > **Author:** Philippe Luu - 2nd-year Computer Engineering student (CESI)
 > **Looking for:** an international offensive-security internship (red / purple team).
@@ -55,12 +54,6 @@ remediation on the other side.
 
 _Tooling:_ Nmap · Burp Suite · ffuf / Gobuster · Metasploit · Hydra · sqlmap ·
 John the Ripper / Hashcat · Wireshark / tcpdump · Impacket · Splunk · KQL.
-
----
-
-## 🎓 Certifications in progress
-
-- **Microsoft SC-200** - Security Operations Analyst (KQL, Defender XDR, Microsoft Sentinel).
 
 ---
 
