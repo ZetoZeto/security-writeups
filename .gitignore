@@ -1,0 +1,18 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.vscode/
+.idea/
+
+# Never commit these to a public portfolio
+*.env
+*.pem
+*.key
+*_creds*
+*secrets*
+scan.txt
+loot/
+raw-notes/
